@@ -3,6 +3,18 @@ Dependent Types in UI stuff
 
 This repository is for a conversation about why dependent types are motivated in UI code.
 
+Short Version
+=============
+
+Sometimes I wish I had dependent types when writing UIs in typescript
+and react. This is because in fact the possible state transitions of
+the UI depend on the current state. If only I could represent this
+invariant in a way the type-checker understood, then I would be able
+to eliminate some morally unnecessary dynamic checks.
+
+Longer Version
+==============
+
 <a href="https://jcreedcmu.github.io/deptypes-example/">Here's a little toy UI</a> that has two states "edit some strings" and "edit some numbers". In the usual redux-y style, I have a function reduce that takes a `State` and an `Action` and returns a `State`. I `dispatch` these `Action`s from event handlers in UI elements in the DOM.
 
 What's annoying
