@@ -8,7 +8,7 @@ This repository is for a conversation about why dependent/existential/GADT types
 What's annoying
 ---------------
 
-In my reducer, I don't statically know that only some actions will get dispatched from some states.
+In my reducer, I don't statically know that only some actions will get dispatched from some states. I don't like all of the "should be unreachable"-commented checks in [`reduce.ts`](https://github.com/jcreedcmu/deptypes-example/blob/main/src/reduce.ts).
 
 What I think I want
 -------------------
