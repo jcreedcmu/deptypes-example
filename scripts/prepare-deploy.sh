@@ -7,6 +7,5 @@ make build
 cp -rv \
   public/index.html \
   public/bundle.js \
-  public/assets \
   public/style.css \
   dist
