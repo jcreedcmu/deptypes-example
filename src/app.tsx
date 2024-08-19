@@ -1,32 +1,44 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { doEffect } from './effect';
-import { ExampleCanvas } from './example-canvas';
-import { extractEffects } from './lib/extract-effects';
-import { useEffectfulReducer } from './lib/use-effectful-reducer';
 import { reduce } from './reduce';
 import { mkState } from './state';
 
 export type AppProps = {
-  color: string,
 };
 
 export function App(props: AppProps): JSX.Element {
-  const [state, dispatch] = useEffectfulReducer(mkState(), extractEffects(reduce), doEffect);
-  const { counter } = state;
-  return <>
-    <span style={{ color: props.color }}>Hello, World!</span><p />
-    Counter Value is: {counter}<p />
-    <button onMouseDown={(e) => { dispatch({ t: 'increment' }) }}>Increment</button><p />
-    <button onMouseDown={(e) => { dispatch({ t: 'side-effect' }) }}>Side Effect</button><p />
-    <ExampleCanvas counter={counter} dispatch={dispatch} /><p />
-    {state.debugStr}
-  </>;
+  const [state, dispatch] = React.useReducer(reduce, mkState());
+
+  const center: React.CSSProperties = {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 10,
+  };
+
+  switch (state.t) {
+    case 'editStrings': return <div style={center}>
+      <input value={state.s1} onChange={e => { dispatch({ t: 'setString1', s: e.currentTarget.value }) }}></input><br />
+      <input value={state.s2} onChange={e => { dispatch({ t: 'setString2', s: e.currentTarget.value }) }}></input><br />
+      <input value={state.s3} onChange={e => { dispatch({ t: 'setString3', s: e.currentTarget.value }) }}></input><br />
+      <button onMouseDown={(e) => { dispatch({ t: 'editNumbers' }) }}>Edit Numbers</button>
+    </div>
+
+    case 'editNumbers': return <div style={center}>
+      <input type="range" min="0" max="100" value={state.n1} onChange={e => { dispatch({ t: 'setNumber1', n: parseInt(e.currentTarget.value) }) }}></input><br />
+      <input type="range" min="0" max="100" value={state.n2} onChange={e => { dispatch({ t: 'setNumber2', n: parseInt(e.currentTarget.value) }) }}></input><br />
+      <input type="range" min="0" max="100" value={state.n3} onChange={e => { dispatch({ t: 'setNumber3', n: parseInt(e.currentTarget.value) }) }}></input><br />
+      <button onMouseDown={(e) => { dispatch({ t: 'editStrings' }) }}>Edit Strings</button>
+    </div>
+
+  }
 }
 
 export function init() {
   const props: AppProps = {
-    color: '#f0f',
   };
   const root = createRoot(document.querySelector('.app')!);
   root.render(<App {...props} />);
